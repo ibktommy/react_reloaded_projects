@@ -1,7 +1,7 @@
-import sunnyImage from '../assets/images/sunny.png'
-import cloudyImage from '../assets/images/cloudy.png'
-import rainyImage from '../assets/images/rainy.png'
-import snowyImage from '../assets/images/snowy.png'
+import sunnyImage from "../assets/images/sunny.png";
+import cloudyImage from "../assets/images/cloudy.png";
+import rainyImage from "../assets/images/rainy.png";
+import snowyImage from "../assets/images/snowy.png";
 
 const WeatherApp = () => {
   return (
@@ -12,13 +12,11 @@ const WeatherApp = () => {
             <i className="fa-solid fa-location-dot"></i>
             <div className="location">London</div>
           </div>
-
           <div className="search_bar">
             <input type="text" placeholder="Enter Location" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
-
         <div className="weather">
           <img src={sunnyImage} alt="sunny" />
           <div className="weather_type">Clear</div>
@@ -42,6 +40,6 @@ const WeatherApp = () => {
       </div>
     </div>
   );
-}
+};
 
-export default WeatherApp
+export default WeatherApp;
