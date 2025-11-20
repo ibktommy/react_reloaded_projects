@@ -1,10 +1,5 @@
-
-
-require("dotenv").config();
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
-
-exports.handler = async (event) => {
+// netlify/functions/apiHandler.js
+export const handler = async (event) => {
   const { city } = event.queryStringParameters;
 
   const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;

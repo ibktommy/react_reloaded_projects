@@ -9,7 +9,7 @@ const WeatherApp = () => {
 
   // get weather data
   const searchLocationWeather = async () => {
-    const res = await fetch(`.netlify/functions/apiHandler?city=London`);
+    const res = await fetch(`/.netlify/functions/apiHandler?city=London`);
     // const locationData = await res.json();
     // console.log(locationData);
     const text = await res.text();
