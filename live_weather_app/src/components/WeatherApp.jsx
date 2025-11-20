@@ -2,8 +2,20 @@ import sunnyImage from "../assets/images/sunny.png";
 import cloudyImage from "../assets/images/cloudy.png";
 import rainyImage from "../assets/images/rainy.png";
 import snowyImage from "../assets/images/snowy.png";
+import { useState } from "react";
 
 const WeatherApp = () => {
+  const [data, setData] = useState();
+
+  // get weather data
+  const searchLocationWeather = async () => {
+    const res = await fetch(`.netlify/functions/apiHandler?city=London`);
+    // const locationData = await res.json();
+    // console.log(locationData);
+    const text = await res.text();
+    console.log(text);
+  };
+
   return (
     <div className="container">
       <div className="weather_app">
@@ -14,7 +26,10 @@ const WeatherApp = () => {
           </div>
           <div className="search_bar">
             <input type="text" placeholder="Enter Location" />
-            <i className="fa-solid fa-magnifying-glass"></i>
+            <i
+              className="fa-solid fa-magnifying-glass"
+              onClick={searchLocationWeather}
+            ></i>
           </div>
         </div>
         <div className="weather">
