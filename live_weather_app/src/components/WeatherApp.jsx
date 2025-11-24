@@ -6,15 +6,28 @@ import { useState } from "react";
 
 const WeatherApp = () => {
   const [data, setData] = useState();
+  const [location, setLocation] = useState("");
+
+  // update city input value
+  function handleInputChange(e) {
+    setLocation(e.target.value);
+  }
 
   // get weather data
-  const searchLocationWeather = async () => {
-    const res = await fetch(`/.netlify/functions/apiHandler?city=London`);
-    // const locationData = await res.json();
-    // console.log(locationData);
-    const text = await res.text();
-    console.log(text);
-  };
+  async function searchLocationWeather() {
+    const res = await fetch(`/.netlify/functions/apiHandler?city=${location}`);
+    const locationData = await res.json();
+    setData(locationData);
+    console.log(locationData);
+    setLocation("");
+  }
+
+  // get data when 'enter' key is pressed after input
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      searchLocationWeather();
+    }
+  }
 
   return (
     <div className="container">
@@ -22,10 +35,16 @@ const WeatherApp = () => {
         <div className="search">
           <div className="search_top">
             <i className="fa-solid fa-location-dot"></i>
-            <div className="location">London</div>
+            <div className="location">{data && data.name}</div>
           </div>
           <div className="search_bar">
-            <input type="text" placeholder="Enter Location" />
+            <input
+              type="text"
+              placeholder="Enter Location"
+              value={location}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
             <i
               className="fa-solid fa-magnifying-glass"
               onClick={searchLocationWeather}
