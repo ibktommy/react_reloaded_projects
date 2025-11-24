@@ -2,11 +2,29 @@ import sunnyImage from "../assets/images/sunny.png";
 import cloudyImage from "../assets/images/cloudy.png";
 import rainyImage from "../assets/images/rainy.png";
 import snowyImage from "../assets/images/snowy.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const WeatherApp = () => {
   const [data, setData] = useState();
   const [location, setLocation] = useState("");
+
+  // fetch default location for app
+  async function fetchDefaultWeather() {
+    try {
+      const default_location = "Lagos";
+      const url = `/.netlify/functions/apiHandler?city=${default_location}`;
+      const res = await fetch(url);
+      const default_data = await res.json();
+      setData(default_data);
+    } catch (error) {
+      console.error("Failed to fetch weather:", error);
+    }
+  }
+
+  // get data before app renders
+  useEffect(() => {
+    fetchDefaultWeather();
+  }, []);
 
   // update city input value
   function handleInputChange(e) {
@@ -15,11 +33,17 @@ const WeatherApp = () => {
 
   // get weather data
   async function searchLocationWeather() {
-    const res = await fetch(`/.netlify/functions/apiHandler?city=${location}`);
-    const locationData = await res.json();
-    setData(locationData);
-    console.log(locationData);
-    setLocation("");
+    if (location.trim() !== "") {
+      const res = await fetch(
+        `/.netlify/functions/apiHandler?city=${location}`
+      );
+      const locationData = await res.json();
+      setData(locationData);
+      console.log(locationData);
+      setLocation("");
+    } else {
+      alert("You cannot search for an empty city name!");
+    }
   }
 
   // get data when 'enter' key is pressed after input
@@ -53,8 +77,10 @@ const WeatherApp = () => {
         </div>
         <div className="weather">
           <img src={sunnyImage} alt="sunny" />
-          <div className="weather_type">Clear</div>
-          <div className="temp">28℃</div>
+          <div className="weather_type">{data?.weather?.[0]?.main ?? "__"}</div>
+          <div className="temp">
+            {data?.main?.temp != null ? `${data.main.temp}℃` : "_℃"}
+          </div>
         </div>
         <div className="weather_date">
           <p>Fri, 3 May</p>
@@ -63,12 +89,18 @@ const WeatherApp = () => {
           <div className="humidity">
             <div className="data_name">Humidity</div>
             <i className="fa-solid fa-droplet"></i>
-            <div className="data">35%</div>
+            <div className="data">
+              {data?.main?.humidity != null ? `${data.main.humidity}%` : "_%"}
+            </div>
           </div>
           <div className="wind">
             <div className="data_name">Wind</div>
             <i className="fa-solid fa-wind"></i>
-            <div className="data">3 km/hr</div>
+            <div className="data">
+              {data?.wind?.speed != null
+                ? `${data.wind.speed} km/hr`
+                : "_ km/hr"}
+            </div>
           </div>
         </div>
       </div>
