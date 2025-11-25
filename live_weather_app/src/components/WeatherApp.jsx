@@ -53,6 +53,16 @@ const WeatherApp = () => {
     }
   }
 
+  // set date
+  const current_date = new Date()
+  const days_list = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  const months_list = ["Jan", "Feb", "Mar", "Apr", "May", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  const selected_day = days_list[current_date.getDay() - 1]
+  const selected_day_number = current_date.getDate()
+  const selected_month = months_list[current_date.getMonth() + 1]
+  const formatted_date = `${selected_day}, ${selected_day_number} ${selected_month}`
+
+
   return (
     <div className="container">
       <div className="weather_app">
@@ -83,7 +93,7 @@ const WeatherApp = () => {
           </div>
         </div>
         <div className="weather_date">
-          <p>Fri, 3 May</p>
+          <p>{formatted_date}</p>
         </div>
         <div className="weather_data">
           <div className="humidity">
