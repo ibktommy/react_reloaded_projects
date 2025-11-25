@@ -2,23 +2,28 @@ import sunnyImage from "../assets/images/sunny.png";
 import cloudyImage from "../assets/images/cloudy.png";
 import rainyImage from "../assets/images/rainy.png";
 import snowyImage from "../assets/images/snowy.png";
+import LoadingImg from "../assets/images/loading.gif";
 import { useEffect, useState } from "react";
 
 const WeatherApp = () => {
   const [data, setData] = useState();
   const [location, setLocation] = useState("");
   const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // fetch default location for app
   async function fetchDefaultWeather() {
     try {
+      setLoading(true);
       const default_location = "Lagos";
       const url = `/.netlify/functions/apiHandler?city=${default_location}`;
       const res = await fetch(url);
       const default_data = await res.json();
       setData(default_data);
+      setLoading(false);
     } catch (error) {
-      console.error("Failed to fetch weather:", error);
+      alert("Failed to fetch weather! Check your network", error);
+      // console.error("Failed to fetch weather:", error);
     }
   }
 
@@ -34,6 +39,7 @@ const WeatherApp = () => {
 
   // get weather data
   async function searchLocationWeather() {
+    setLoading(true);
     if (location.trim() !== "") {
       const res = await fetch(
         `/.netlify/functions/apiHandler?city=${location}`
@@ -43,7 +49,7 @@ const WeatherApp = () => {
         setNotFound(true);
         setData(locationData);
       } else {
-        setNotFound(false)
+        setNotFound(false);
         setData(locationData);
         console.log(locationData);
       }
@@ -51,6 +57,7 @@ const WeatherApp = () => {
     } else {
       alert("You cannot search for an empty city name!");
     }
+    setLoading(false);
   }
 
   // get data when 'enter' key is pressed after input
@@ -106,7 +113,9 @@ const WeatherApp = () => {
           </div>
         </div>
 
-        {notFound ? (
+        {loading ? (
+          <img src={LoadingImg} alt="loading image" className="loader"/>
+        ) : notFound ? (
           <div className="not_found">
             <h4>Error: {data?.cod}</h4>
             <p>{data?.message}😩</p>

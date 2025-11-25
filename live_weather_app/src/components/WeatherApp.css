@@ -80,6 +80,12 @@
   cursor: pointer;
 }
 
+.loader {
+  width: 5rem;
+  margin-top: 10rem;
+  object-fit: cover;
+}
+
 .not_found {
   margin-top: 2rem;
   display: flex;
@@ -89,12 +95,16 @@
 
 .not_found h4 {
   font-size: 1.5rem;
+  color: #484569;
+  text-shadow: -.3rem .5rem 1rem rgba(0,0,0,.2);
 }
 
 .not_found p {
   text-transform: capitalize;
   font-size: 2rem;
   letter-spacing: .1rem;
+  color: #484569;
+  text-shadow: -.3rem .5rem 1rem rgba(0,0,0,.2);
 }
 
 .weather img {
