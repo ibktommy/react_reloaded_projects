@@ -80,6 +80,23 @@
   cursor: pointer;
 }
 
+.not_found {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.not_found h4 {
+  font-size: 1.5rem;
+}
+
+.not_found p {
+  text-transform: capitalize;
+  font-size: 2rem;
+  letter-spacing: .1rem;
+}
+
 .weather img {
   margin-top: -9rem;
 }

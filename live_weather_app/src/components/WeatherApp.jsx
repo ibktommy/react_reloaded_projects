@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const WeatherApp = () => {
   const [data, setData] = useState();
   const [location, setLocation] = useState("");
+  const [notFound, setNotFound] = useState(false);
 
   // fetch default location for app
   async function fetchDefaultWeather() {
@@ -38,8 +39,14 @@ const WeatherApp = () => {
         `/.netlify/functions/apiHandler?city=${location}`
       );
       const locationData = await res.json();
-      setData(locationData);
-      console.log(locationData);
+      if (locationData?.cod !== 200) {
+        setNotFound(true);
+        setData(locationData);
+      } else {
+        setNotFound(false)
+        setData(locationData);
+        console.log(locationData);
+      }
       setLocation("");
     } else {
       alert("You cannot search for an empty city name!");
@@ -54,14 +61,27 @@ const WeatherApp = () => {
   }
 
   // set date
-  const current_date = new Date()
-  const days_list = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-  const months_list = ["Jan", "Feb", "Mar", "Apr", "May", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-  const selected_day = days_list[current_date.getDay() - 1]
-  const selected_day_number = current_date.getDate()
-  const selected_month = months_list[current_date.getMonth() + 1]
-  const formatted_date = `${selected_day}, ${selected_day_number} ${selected_month}`
-
+  const current_date = new Date();
+  const days_list = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const months_list = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const selected_day = days_list[current_date.getDay() - 1];
+  const selected_day_number = current_date.getDate();
+  const selected_month = months_list[current_date.getMonth() + 1];
+  const formatted_date = `${selected_day}, ${selected_day_number} ${selected_month}`;
 
   return (
     <div className="container">
@@ -85,34 +105,48 @@ const WeatherApp = () => {
             ></i>
           </div>
         </div>
-        <div className="weather">
-          <img src={sunnyImage} alt="sunny" />
-          <div className="weather_type">{data?.weather?.[0]?.main ?? "__"}</div>
-          <div className="temp">
-            {data?.main?.temp != null ? `${data.main.temp}℃` : "_℃"}
+
+        {notFound ? (
+          <div className="not_found">
+            <h4>Error: {data?.cod}</h4>
+            <p>{data?.message}😩</p>
           </div>
-        </div>
-        <div className="weather_date">
-          <p>{formatted_date}</p>
-        </div>
-        <div className="weather_data">
-          <div className="humidity">
-            <div className="data_name">Humidity</div>
-            <i className="fa-solid fa-droplet"></i>
-            <div className="data">
-              {data?.main?.humidity != null ? `${data.main.humidity}%` : "_%"}
+        ) : (
+          <>
+            <div className="weather">
+              <img src={sunnyImage} alt="sunny" />
+              <div className="weather_type">
+                {data?.weather?.[0]?.main ?? "__"}
+              </div>
+              <div className="temp">
+                {data?.main?.temp != null ? `${data.main.temp}℃` : "_℃"}
+              </div>
             </div>
-          </div>
-          <div className="wind">
-            <div className="data_name">Wind</div>
-            <i className="fa-solid fa-wind"></i>
-            <div className="data">
-              {data?.wind?.speed != null
-                ? `${data.wind.speed} km/hr`
-                : "_ km/hr"}
+            <div className="weather_date">
+              <p>{formatted_date}</p>
             </div>
-          </div>
-        </div>
+            <div className="weather_data">
+              <div className="humidity">
+                <div className="data_name">Humidity</div>
+                <i className="fa-solid fa-droplet"></i>
+                <div className="data">
+                  {data?.main?.humidity != null
+                    ? `${data.main.humidity}%`
+                    : "_%"}
+                </div>
+              </div>
+              <div className="wind">
+                <div className="data_name">Wind</div>
+                <i className="fa-solid fa-wind"></i>
+                <div className="data">
+                  {data?.wind?.speed != null
+                    ? `${data.wind.speed} km/hr`
+                    : "_ km/hr"}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
